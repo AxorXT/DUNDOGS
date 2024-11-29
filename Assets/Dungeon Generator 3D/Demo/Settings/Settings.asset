@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   generation:
-    minRooms: 24
-    maxRooms: 51
+    minRooms: 34
+    maxRooms: 61
     amountOfAdjacentRoomsToConnect: 3
     minRoomWidth: 8
     maxRoomWidth: 12
