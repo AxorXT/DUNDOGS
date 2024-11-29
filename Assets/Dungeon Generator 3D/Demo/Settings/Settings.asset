@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   generation:
-    minRooms: 10
-    maxRooms: 15
+    minRooms: 24
+    maxRooms: 51
     amountOfAdjacentRoomsToConnect: 3
     minRoomWidth: 8
     maxRoomWidth: 12
@@ -24,8 +24,8 @@ MonoBehaviour:
     maxBossRoomWidth: 12
     minBossRoomHeight: 10
     maxBossRoomHeight: 12
-    areaWidth: 100
-    areaHeight: 100
+    areaWidth: 173
+    areaHeight: 183
     minDistanceBetweenRooms: 1
     walls:
     - gameObject: {fileID: 4725644372996588504, guid: 149a4fa0a96e08148aab0a113d1ccef5, type: 3}
