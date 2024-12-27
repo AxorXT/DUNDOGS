@@ -1,11 +1,10 @@
 using UnityEngine;
 
-[System.Serializable]
 public class InventoryNode
 {
-    public string itemName; 
-    public Sprite itemIcon; 
-    public InventoryNode next; 
+    public string itemName;
+    public Sprite itemIcon;
+    public InventoryNode next;
 
     public InventoryNode(string name, Sprite icon)
     {

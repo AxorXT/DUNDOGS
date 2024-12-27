@@ -1,16 +1,21 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour
 {
-    public Transform inventoryPanel; // Panel donde se mostrarán los slots
-    public GameObject slotPrefab; // Prefab del slot del inventario
+    public Transform inventoryPanel;
+    public GameObject slotPrefab;
 
-    private InventoryNode head; // Nodo inicial de la lista
-    private InventoryNode tail; // Nodo final para facilitar la inserción
+    private InventoryNode head;
+    private InventoryNode tail;
 
     public void AddItem(string name, Sprite icon)
     {
+        if (string.IsNullOrEmpty(name) || icon == null)
+        {
+            Debug.LogError("El nombre o el ícono del ítem no pueden ser nulos.");
+            return;
+        }
+
         InventoryNode newNode = new InventoryNode(name, icon);
 
         if (head == null)
@@ -29,6 +34,12 @@ public class Inventory : MonoBehaviour
 
     private void UpdateInventoryUI()
     {
+        if (inventoryPanel == null)
+        {
+            Debug.LogError("inventoryPanel no está asignado.");
+            return;
+        }
+
         foreach (Transform child in inventoryPanel)
         {
             Destroy(child.gameObject);
@@ -40,14 +51,34 @@ public class Inventory : MonoBehaviour
             GameObject slot = Instantiate(slotPrefab, inventoryPanel);
             SlotUI slotUI = slot.GetComponent<SlotUI>();
 
-            slotUI.SetSlot(
-                currentNode.itemName,
-                currentNode.itemIcon,
-                () => Debug.Log($"Usando objeto: {currentNode.itemName}")
-            );
+            if (slotUI != null)
+            {
+                slotUI.SetSlot(
+                    currentNode.itemName,
+                    currentNode.itemIcon,
+                    () => Debug.Log($"Usando objeto: {currentNode.itemName}")
+                );
+            }
+            else
+            {
+                Debug.LogError("El prefab no tiene un componente SlotUI.");
+            }
 
             currentNode = currentNode.next;
         }
     }
+}
 
+public class InventoryNode
+{
+    public string itemName;
+    public Sprite itemIcon;
+    public InventoryNode next;
+
+    public InventoryNode(string name, Sprite icon)
+    {
+        itemName = name;
+        itemIcon = icon;
+        next = null;
+    }
 }

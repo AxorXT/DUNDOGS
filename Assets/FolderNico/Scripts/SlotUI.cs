@@ -3,25 +3,15 @@ using UnityEngine.UI;
 
 public class SlotUI : MonoBehaviour
 {
-    public Image icon; // Imagen para el ícono del objeto
-    public Text itemName; // Texto para el nombre del objeto
-    private Button button; // Referencia al botón
+    public Text itemNameText;
+    public Image itemIconImage;
+    public Button buyButton;
 
-    private void Awake()
+    public void SetSlot(string itemName, Sprite itemIcon, System.Action onBuy)
     {
-        button = GetComponent<Button>();
-    }
-
-    public void SetSlot(string name, Sprite itemIcon, System.Action onClickAction = null)
-    {
-        itemName.text = name;
-        icon.sprite = itemIcon;
-        icon.enabled = itemIcon != null;
-
-        if (onClickAction != null)
-        {
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => onClickAction());
-        }
+        itemNameText.text = itemName;
+        itemIconImage.sprite = itemIcon;
+        buyButton.onClick.RemoveAllListeners();
+        buyButton.onClick.AddListener(() => onBuy());
     }
 }
