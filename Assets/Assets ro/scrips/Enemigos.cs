@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemigos : MonoBehaviour
 {
@@ -12,19 +13,29 @@ public class Enemigos : MonoBehaviour
     public GameObject target;
     public bool atacando;
 
-    // Nueva variable para la velocidad
+    // Velocidades para el Blend Tree
     public float velocidadCaminar = 1f;
     public float velocidadCorrer = 2f;
+
+    // Referencia al agente de NavMesh
+    private NavMeshAgent agente;
 
     void Start()
     {
         ani = GetComponent<Animator>();
+        agente = GetComponent<NavMeshAgent>();
         target = GameObject.Find("Link");
+
+        // Configurar velocidades en el NavMeshAgent
+        agente.speed = velocidadCaminar;
+        agente.stoppingDistance = 1f; // Distancia mínima para detenerse cerca del objetivo
     }
 
     public void Comportamiento_Enemigo()
     {
-        if (Vector3.Distance(transform.position, target.transform.position) > 5)
+        float distanciaAlJugador = Vector3.Distance(transform.position, target.transform.position);
+
+        if (distanciaAlJugador > 5) // Estado de patrulla
         {
             cronometro += Time.deltaTime;
             if (cronometro >= 4)
@@ -32,43 +43,47 @@ public class Enemigos : MonoBehaviour
                 rutina = Random.Range(0, 2);
                 cronometro = 0;
             }
+
             switch (rutina)
             {
-                case 0:
-                    ani.SetBool("walk", false);
+                case 0: // Idle
+                    agente.isStopped = true;
+                    ani.SetFloat("Speed", 0); // Estado "Idle" en el Blend Tree
                     break;
-                case 1:
+
+                case 1: // Elegir dirección aleatoria
                     grado = Random.Range(0, 360);
                     angulo = Quaternion.Euler(0, grado, 0);
                     rutina++;
                     break;
-                case 2:
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 100 * Time.deltaTime);
-                    transform.Translate(Vector3.forward * velocidadCaminar * Time.deltaTime);
-                    ani.SetBool("walk", true);
+
+                case 2: // Caminar hacia un punto aleatorio
+                    Vector3 destinoAleatorio = transform.position + new Vector3(Mathf.Sin(grado), 0, Mathf.Cos(grado)) * 5;
+                    NavMeshHit hit;
+                    if (NavMesh.SamplePosition(destinoAleatorio, out hit, 5f, NavMesh.AllAreas))
+                    {
+                        agente.SetDestination(hit.position);
+                        agente.isStopped = false;
+                        agente.speed = velocidadCaminar;
+                        ani.SetFloat("Speed", velocidadCaminar); // Estado "Walk" en el Blend Tree
+                    }
                     break;
             }
         }
-        else
+        else // Estado de persecución
         {
-            if (Vector3.Distance(transform.position, target.transform.position) > 1)
+            if (distanciaAlJugador > agente.stoppingDistance) // Perseguir al jugador
             {
-                var looksPos = target.transform.position - transform.position;
-                looksPos.y = 0;
-                var rotation = Quaternion.LookRotation(looksPos);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 200 * Time.deltaTime);
-
-                ani.SetBool("walk", false);
-                ani.SetBool("run", true);
-                transform.Translate(Vector3.forward * velocidadCorrer * Time.deltaTime);
-
-                ani.SetBool("attack", false);
+                agente.SetDestination(target.transform.position);
+                agente.isStopped = false;
+                agente.speed = velocidadCorrer;
+                ani.SetFloat("Speed", velocidadCorrer); // Estado "Run" en el Blend Tree
             }
-            else
+            else // Atacar
             {
-                ani.SetBool("walk", false);
-                ani.SetBool("run", false);
-                ani.SetBool("attack", true);
+                agente.isStopped = true;
+                ani.SetFloat("Speed", 0); // Estado "Idle" en el Blend Tree
+                ani.SetTrigger("Attack");
                 atacando = true;
             }
         }
@@ -76,7 +91,11 @@ public class Enemigos : MonoBehaviour
 
     public void Final_ani()
     {
-        ani.SetBool("attack", false);
         atacando = false;
+    }
+
+    void Update()
+    {
+        Comportamiento_Enemigo();
     }
 }
