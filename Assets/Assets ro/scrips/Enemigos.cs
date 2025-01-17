@@ -11,7 +11,7 @@ public class Enemigos : MonoBehaviour
     public Quaternion angulo;
     public float grado;
     public GameObject target;
-    public bool atacando;
+    public bool attack;
 
     // Velocidades para el Blend Tree
     public float velocidadCaminar = 1f;
@@ -24,7 +24,6 @@ public class Enemigos : MonoBehaviour
     {
         ani = GetComponent<Animator>();
         agente = GetComponent<NavMeshAgent>();
-        target = GameObject.Find("Link");
 
         // Configurar velocidades en el NavMeshAgent
         agente.speed = velocidadCaminar;
@@ -83,15 +82,15 @@ public class Enemigos : MonoBehaviour
             {
                 agente.isStopped = true;
                 ani.SetFloat("Speed", 0); // Estado "Idle" en el Blend Tree
-                ani.SetTrigger("Attack");
-                atacando = true;
+                ani.SetTrigger("attack");
+                attack = true;
             }
         }
     }
 
     public void Final_ani()
     {
-        atacando = false;
+        attack = false;
     }
 
     void Update()
