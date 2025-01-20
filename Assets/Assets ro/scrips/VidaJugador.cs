@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class VidaJugador : MonoBehaviour
 {
-    /*
+    
     public int VidaMaxima = 3;
     private int VidaActual;
     public Image[] VidaImagen;
@@ -32,7 +32,7 @@ public class VidaJugador : MonoBehaviour
 
     void ReiniciarEscena()
     {
-        int currentSceneIndex = SceneManager.GetActiveScene().biuldIndex;
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
     }
 
@@ -49,5 +49,5 @@ public class VidaJugador : MonoBehaviour
         VidaActual = Mathf.Clamp(VidaActual, 0, VidaMaxima);
         actualizarInterfaz();
     }
-    */
+  
 }

@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class ProvocarDaño : MonoBehaviour
 {
-    /*
     public VidaJugador vidaJugador;
     public bool PuedeDañar = true;
     public float Cooldown = 3f;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && PuedeDañar)
         {
             vidaJugador.RecibirDaño(1);
-            PuedeDañar = false;
+            PuedeDañar = false; // Desactiva el daño temporalmente
             StartCoroutine(CooldownDaño());
         }
     }
@@ -22,7 +21,6 @@ public class ProvocarDaño : MonoBehaviour
     IEnumerator CooldownDaño()
     {
         yield return new WaitForSeconds(Cooldown);
-        PuedeDañar = true;
+        PuedeDañar = true; // Reactiva el daño después del cooldown
     }
-    */
 }
