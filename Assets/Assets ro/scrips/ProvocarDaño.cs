@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProvocarDaño : MonoBehaviour
 {
+    /*
     public VidaJugador vidaJugador;
     public bool PuedeDañar = true;
     public float Cooldown = 3f;
@@ -13,13 +14,15 @@ public class ProvocarDaño : MonoBehaviour
         if (other.CompareTag("Player") && PuedeDañar)
         {
             vidaJugador.RecibirDaño(1);
-            PuedeDañar=false;
+            PuedeDañar = false;
             StartCoroutine(CooldownDaño());
         }
     }
-    
+
     IEnumerator CooldownDaño()
     {
         yield return new WaitForSeconds(Cooldown);
-        PuedeDañar = true ;
+        PuedeDañar = true;
     }
+    */
+}

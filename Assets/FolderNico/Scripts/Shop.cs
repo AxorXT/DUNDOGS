@@ -1,68 +1,35 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
-    [System.Serializable]
-    public class ShopItem
+    public List<Item> shopItems = new List<Item>();
+    private ShopLoader shopLoader;
+
+    private void Start()
     {
-        public string itemName;
-        public Sprite itemIcon;
-        public int itemPrice;
+        shopLoader = GetComponent<ShopLoader>();
+        shopItems = shopLoader.LoadShopItems();
     }
 
-    public List<ShopItem> allItems;
-    public Transform shopPanel;
-    public GameObject slotPrefab;
-
-    private List<ShopItem> displayedItems = new List<ShopItem>();
-
-    void Start()
+    public void BuyItem(Item item, Inventory inventory)
     {
-        DisplayRandomItems();
+        if (inventory.HasEnoughMoney(item.price))
+        {
+            inventory.SpendMoney(item.price);
+            inventory.AddItem(item); 
+            Debug.Log($"Has comprado {item.itemName} por {item.price} monedas. Dinero restante: {inventory.playerMoney}");
+        }
+        else
+        {
+            Debug.Log("No tienes suficiente dinero.");
+        }
     }
 
-    void DisplayRandomItems()
+
+    public void SellItem(Item item, Inventory inventory)
     {
-        foreach (Transform child in shopPanel)
-        {
-            Destroy(child.gameObject);
-        }
-
-        if (allItems.Count < 6)
-        {
-            Debug.LogError("No hay suficientes ítems en la lista para llenar la tienda.");
-            return;
-        }
-
-        HashSet<int> selectedIndices = new HashSet<int>();
-        while (selectedIndices.Count < 6)
-        {
-            int randomIndex = Random.Range(0, allItems.Count);
-            selectedIndices.Add(randomIndex);
-        }
-
-        displayedItems.Clear();
-        foreach (int index in selectedIndices)
-        {
-            ShopItem item = allItems[index];
-            displayedItems.Add(item);
-
-            GameObject slot = Instantiate(slotPrefab, shopPanel);
-            SlotUI slotUI = slot.GetComponent<SlotUI>();
-
-            if (slotUI != null)
-            {
-                slotUI.SetSlot(
-                    item.itemName,
-                    item.itemIcon,
-                    () => Debug.Log($"Comprando ítem: {item.itemName} por {item.itemPrice} monedas.")
-                );
-            }
-            else
-            {
-                Debug.LogError("El prefab del slot no tiene un componente SlotUI.");
-            }
-        }
+        inventory.RemoveItem(item);
+        Debug.Log($"Has vendido {item.itemName}");
     }
 }

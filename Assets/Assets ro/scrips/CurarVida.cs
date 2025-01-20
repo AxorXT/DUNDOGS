@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CurarVida : MonoBehaviour
 {
-
+    /*
     public VidaJugador vidaJugador;
 
 
@@ -16,4 +16,5 @@ public class CurarVida : MonoBehaviour
 
         }
     }
+    */
 }

@@ -1,84 +1,71 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public Transform inventoryPanel;
-    public GameObject slotPrefab;
+    public List<Item> items = new List<Item>();
+    public int playerMoney = 500; 
 
-    private InventoryNode head;
-    private InventoryNode tail;
-
-    public void AddItem(string name, Sprite icon)
+    private void Start()
     {
-        if (string.IsNullOrEmpty(name) || icon == null)
-        {
-            Debug.LogError("El nombre o el ícono del ítem no pueden ser nulos.");
-            return;
-        }
+        LoadInventory();
+    }
 
-        InventoryNode newNode = new InventoryNode(name, icon);
-
-        if (head == null)
+    public void AddItem(Item item)
+    {
+        Item existingItem = items.Find(i => i.itemName == item.itemName);
+        if (existingItem != null)
         {
-            head = newNode;
-            tail = newNode;
+            existingItem.quantity += item.quantity;
         }
         else
         {
-            tail.next = newNode;
-            tail = newNode;
+            items.Add(item);
         }
-
-        UpdateInventoryUI();
+        SaveInventory();
     }
 
-    private void UpdateInventoryUI()
+    public void RemoveItem(Item item)
     {
-        if (inventoryPanel == null)
+        Item existingItem = items.Find(i => i.itemName == item.itemName);
+        if (existingItem != null)
         {
-            Debug.LogError("inventoryPanel no está asignado.");
-            return;
+            existingItem.quantity -= item.quantity;
+            if (existingItem.quantity <= 0)
+                items.Remove(existingItem);
         }
+        SaveInventory();
+    }
 
-        foreach (Transform child in inventoryPanel)
+    public bool HasEnoughMoney(int price)
+    {
+        return playerMoney >= price;
+    }
+
+    public void SpendMoney(int amount)
+    {
+        if (HasEnoughMoney(amount))
         {
-            Destroy(child.gameObject);
+            playerMoney -= amount;
         }
-
-        InventoryNode currentNode = head;
-        while (currentNode != null)
+        else
         {
-            GameObject slot = Instantiate(slotPrefab, inventoryPanel);
-            SlotUI slotUI = slot.GetComponent<SlotUI>();
-
-            if (slotUI != null)
-            {
-                slotUI.SetSlot(
-                    currentNode.itemName,
-                    currentNode.itemIcon,
-                    () => Debug.Log($"Usando objeto: {currentNode.itemName}")
-                );
-            }
-            else
-            {
-                Debug.LogError("El prefab no tiene un componente SlotUI.");
-            }
-
-            currentNode = currentNode.next;
+            Debug.LogWarning("Intento de gastar más dinero del disponible.");
         }
     }
-}
 
-public class InventoryNode
-{
-    public string itemName;
-    public Sprite itemIcon;
-    public InventoryNode next;
-
-    public InventoryNode(string name, Sprite icon)
+    public void AddMoney(int amount)
     {
-        itemName = name;
-        itemIcon = icon;
-        next = null;
+        playerMoney += amount;
+    }
+
+    public void SaveInventory()
+    {
+        InventorySaveSystem.SaveInventory(items);
+    }
+
+    public void LoadInventory()
+    {
+        items = InventorySaveSystem.LoadInventory();
     }
 }
