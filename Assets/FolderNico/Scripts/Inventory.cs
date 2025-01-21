@@ -61,7 +61,7 @@ public class Inventory : MonoBehaviour
 
     public void SaveInventory()
     {
-        InventorySaveSystem.SaveInventory(items);
+        InventorySaveSystem.SaveInventory(items, playerMoney);
     }
 
     public void LoadInventory()
