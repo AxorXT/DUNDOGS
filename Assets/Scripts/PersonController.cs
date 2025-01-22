@@ -8,6 +8,8 @@ public class PersonController : MonoBehaviour
     public float rotationSpeed = 720f;
     public Transform cameraTransform;
 
+    public int damage = 1;
+
     private CharacterController characterController;
     private Vector3 moveDirection;
 
@@ -17,6 +19,20 @@ public class PersonController : MonoBehaviour
         if (characterController == null)
         {
             Debug.LogError("No se encontró un CharacterController en " + gameObject.name);
+        }
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemigo"))
+        {
+            Enemigos enemyHealth = other.GetComponent<Enemigos>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(damage);
+                Debug.Log($"{other.gameObject.name} recibió {damage} de daño.");
+            }
         }
     }
 

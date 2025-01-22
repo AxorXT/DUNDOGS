@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 public class DataManager : MonoBehaviour
@@ -10,8 +11,9 @@ public class DataManager : MonoBehaviour
     public class SaveData
     {
         public List<ItemData> items;
+        public float speed;
+        public int damage;
         public int playerMoney;
-        public int playerDamage;
         public int upgradeLevel;
         public int speedUpgradeCost;
         public int damageUpgradeCost;
@@ -32,6 +34,7 @@ public class DataManager : MonoBehaviour
 
     public Inventory inventory;
     public UpgradeStats upgradeStats;
+    public PersonController personController;
 
     private void Awake()
     {
@@ -39,6 +42,7 @@ public class DataManager : MonoBehaviour
 
         inventory = GetComponent<Inventory>();
         upgradeStats = GetComponent<UpgradeStats>();
+        PersonController personController = GetComponent<PersonController>();
 
         if (inventory == null || upgradeStats == null)
         {
@@ -55,8 +59,8 @@ public class DataManager : MonoBehaviour
         {
             items = new List<ItemData>(),
             playerMoney = inventory.playerMoney,
-
-            playerDamage = upgradeStats.playerDamage,
+            speed = personController.speed,
+            damage = personController.damage,
             upgradeLevel = upgradeStats.upgradeLevel,
             speedUpgradeCost = upgradeStats.speedUpgradeCost,
             damageUpgradeCost = upgradeStats.damageUpgradeCost
@@ -90,7 +94,8 @@ public class DataManager : MonoBehaviour
             inventory.items.Add(new Item(itemData.itemName, null, 0, itemData.quantity));
         }
 
-        upgradeStats.playerDamage = saveData.playerDamage;
+        personController.speed = saveData.speed;
+        personController.damage = saveData.damage;
         upgradeStats.upgradeLevel = saveData.upgradeLevel;
         upgradeStats.speedUpgradeCost = saveData.speedUpgradeCost;
         upgradeStats.damageUpgradeCost = saveData.damageUpgradeCost;

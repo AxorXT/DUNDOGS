@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class UpgradeStats : MonoBehaviour
 {
-    public PersonController playerSpeed;
+    public PersonController personController;
     public Inventory inventory;
-    public int playerDamage = 10; 
     public int upgradeLevel = 0; 
-    public int speedUpgradeCost = 10;
-    public int damageUpgradeCost = 20; 
+    public int speedUpgradeCost = 20;
+    public int damageUpgradeCost = 40; 
 
     public void UpgradeSpeed()
     {
-        if (playerSpeed == null)
+        if (personController == null)
         {
             Debug.LogError("playerSpeed no está asignado.");
             return;
@@ -21,11 +20,11 @@ public class UpgradeStats : MonoBehaviour
 
         if (inventory.HasEnoughMoney(speedUpgradeCost))
         {
-            playerSpeed.speed += playerSpeed.speed * 0.01f;
+            personController.speed += personController.speed * 0.01f;
             inventory.SpendMoney(speedUpgradeCost);
             upgradeLevel++;
-            speedUpgradeCost += 2;
-            Debug.Log($"Velocidad mejorada a {playerSpeed.speed}. Nivel: {upgradeLevel}. Costo siguiente: {speedUpgradeCost} monedas.");
+            speedUpgradeCost += 4;
+            Debug.Log($"Velocidad mejorada a {personController.speed}. Nivel: {upgradeLevel}. Costo siguiente: {speedUpgradeCost} monedas.");
         }
         else
         {
@@ -43,11 +42,11 @@ public class UpgradeStats : MonoBehaviour
 
         if (inventory.HasEnoughMoney(damageUpgradeCost))
         {
-            playerDamage += 5;
+            personController.damage += 1;
             inventory.SpendMoney(damageUpgradeCost);
             upgradeLevel++;
-            damageUpgradeCost += 5;
-            Debug.Log($"Daño mejorado a {playerDamage}. Nivel: {upgradeLevel}. Costo siguiente: {damageUpgradeCost} monedas.");
+            damageUpgradeCost += 20;
+            Debug.Log($"Daño mejorado a {personController}. Nivel: {upgradeLevel}. Costo siguiente: {damageUpgradeCost} monedas.");
         }
         else
         {

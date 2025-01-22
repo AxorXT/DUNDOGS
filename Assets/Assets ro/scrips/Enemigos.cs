@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class Enemigos : MonoBehaviour
 {
+    public int maxHealth = 3; 
+    private int currentHealth;
     public int rutina;
     public float cronometro;
     public Animator ani;
@@ -28,6 +30,25 @@ public class Enemigos : MonoBehaviour
         // Configurar velocidades en el NavMeshAgent
         agente.speed = velocidadCaminar;
         agente.stoppingDistance = 1f; // Distancia mínima para detenerse cerca del objetivo
+        currentHealth = maxHealth;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log($"{gameObject.name} tiene {currentHealth} puntos de salud restantes.");
+
+        // Verifica si la salud llega a 0
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log($"{gameObject.name} ha muerto.");
+        Destroy(gameObject); // Destruye al enemigo
     }
 
     public void Comportamiento_Enemigo()
