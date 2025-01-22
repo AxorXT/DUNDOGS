@@ -4,12 +4,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public List<Item> items = new List<Item>();
-    public int playerMoney = 500; 
-
-    private void Start()
-    {
-        LoadInventory();
-    }
+    public int playerMoney = 10; 
 
     public void AddItem(Item item)
     {
@@ -22,7 +17,6 @@ public class Inventory : MonoBehaviour
         {
             items.Add(item);
         }
-        SaveInventory();
     }
 
     public void RemoveItem(Item item)
@@ -34,7 +28,6 @@ public class Inventory : MonoBehaviour
             if (existingItem.quantity <= 0)
                 items.Remove(existingItem);
         }
-        SaveInventory();
     }
 
     public bool HasEnoughMoney(int price)
@@ -57,15 +50,5 @@ public class Inventory : MonoBehaviour
     public void AddMoney(int amount)
     {
         playerMoney += amount;
-    }
-
-    public void SaveInventory()
-    {
-        InventorySaveSystem.SaveInventory(items, playerMoney);
-    }
-
-    public void LoadInventory()
-    {
-        items = InventorySaveSystem.LoadInventory();
     }
 }

@@ -7,10 +7,11 @@ public class Item
     public Sprite itemIcon;
     public int quantity;
 
-    public Item(string name, Sprite icon, int price, int quantity = 1)
+    public Item(string name, Sprite icon = null, int price = 0, int quantity = 1)
     {
         this.itemName = name;
         this.itemIcon = icon;
         this.quantity = quantity;
     }
+
 }
