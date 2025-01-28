@@ -20,6 +20,10 @@ public class PersonController : MonoBehaviour
         {
             Debug.LogError("No se encontró un CharacterController en " + gameObject.name);
         }
+
+        // Ocultar el cursor y bloquearlo al centro de la pantalla
+        /*Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;*/
     }
 
 
@@ -63,4 +67,10 @@ public class PersonController : MonoBehaviour
         moveDirection.y += Physics.gravity.y * Time.deltaTime;
         characterController.Move(moveDirection * Time.deltaTime);
     }
+
+    /*void OnApplicationQuit()
+    {
+        Cursor.visible = true;  // Asegura que el cursor sea visible cuando se sale del juego
+        Cursor.lockState = CursorLockMode.None;  // Desbloquear el cursor
+    }*/
 }

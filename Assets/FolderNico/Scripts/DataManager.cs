@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DataManager : MonoBehaviour
 {
+    /*
     private string saveFilePath;
 
     [System.Serializable]
@@ -107,4 +108,5 @@ public class DataManager : MonoBehaviour
     {
         SaveGameData();
     }
+    */
 }
